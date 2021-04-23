@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  db:
+    container_name: nestjs_db
+    image: postgres
+    environment: 
+      POSTGRES_PASSWORD: "test1234"
+    ports: 
+      - "5432:5432"
+    volumes: 
+      - db_data:/var/lib/postgresql/data
+    networks: 
+      - nestjs_network
+
+  pgadmin:
+    container_name: nestjs_pgadmin
+    image: dpage/pgadmin4
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: "manoharramarao@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "test1234"
+    ports: 
+      - "5050:80"
+    depends_on: 
+      - db
+    networks: 
+      - nestjs_network
+  
+  nest:
+    container_name: nestjs
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/nest
+      - /nest/node_modules
+    command: npm run start:debug
+    ports:
+      - "3000:3000"
+      - "5005:5005"
+      - "9229:9229"
+    depends_on: 
+      - pgadmin
+    networks: 
+      - nestjs_network
+
+volumes:
+  db_data:
+
+networks: 
+  nestjs_network:
+    driver: bridge

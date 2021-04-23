@@ -1,0 +1,15 @@
+server:
+  port: 3000
+
+db:
+  type: 'postgres'
+  host: 'db'
+  port: 5432
+  username: 'postgres'
+  password: 'test1234'
+  database: 'nestjs'
+  synchronize: true
+  autoLoadEntities: true
+
+url:
+  nestjs: '0.0.0.0:5005'
